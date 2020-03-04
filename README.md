@@ -27,35 +27,28 @@ struct stu
 
 {
 
-	int id;              //id为学生学号 
+	int id;              //id为学生学号
 	char name[100];      //name为学生姓名 
 	int score;           //score为学生成绩 
 	stu* next;           //next用于形成链表 
 }*head;
 
 //建立“学生”类
-//set--建立初始学生数据
-//find--根据学号查找学生信息
-//change--修改学生信息
-//del--删除学生信息
-//add--增加学生
-//sort--对学生成绩排名
-//view--总览所有学生信息
 
 class student
 
 {
 
     public:
-	  student() {}
-	  int set();
-	  void find(int);
-	  void change(int);
-	  int del(int);
-	  int add();
-	  void sort(int);
-	  void view(int);
-	  ~student() {}
+	  student() {}             //构造函数
+	  int set();               //set--建立初始学生数据
+	  void find(int);          //find--根据学号查找学生信息
+	  void change(int);        //change--修改学生信息
+	  int del(int);            //del--删除学生信息
+	  int add();               //add--增加学生
+	  void sort(int);          //sort--对学生成绩排名
+	  void view(int);          //view--总览所有学生信息
+	  ~student() {}            //析构函数
 };
 
 int student::set()
