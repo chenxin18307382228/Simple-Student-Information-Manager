@@ -46,7 +46,7 @@ class student
 
 {
 
-  public:
+    public:
 	  student() {}
 	  int set();
 	  void find(int);
