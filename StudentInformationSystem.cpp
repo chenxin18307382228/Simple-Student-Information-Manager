@@ -1,4 +1,4 @@
-﻿#pragma warning(disable:4996)
+#pragma warning(disable:4996)
 #include<iostream>
 #include<fstream>
 #include<cstring>
@@ -14,14 +14,18 @@ struct stu
 	int score;           //score为学生成绩 
 	stu* next;           //next用于形成链表 
 }*head;
-//建立“学生”类
-//set--建立初始学生数据
-//find--根据学号查找学生信息
-//change--修改学生信息
-//del--删除学生信息
-//add--增加学生
-//sort--对学生成绩排名
-//view--总览所有学生信息 
+/**************************
+建立“学生”类
+构造函数
+set--建立初始学生数据
+find--根据学号查找学生信息
+change--修改学生信息
+del--删除学生信息
+add--增加学生
+sort--对学生成绩排名
+view--总览所有学生信息
+析构函数
+***************************/ 
 class student
 {
 public:
@@ -149,7 +153,7 @@ void student::change()
 		check = 1;
 		cout << "请输入学号：\n";
 		cin >> ID;
-		while (StudentList->next != NULL && StudentList->id != ID)
+		while (StudentList != NULL && StudentList->id != ID)
 		{
 			StudentList = StudentList->next;
 		}
@@ -163,7 +167,7 @@ void student::change()
 		check = 1;
 		cout << "请输入姓名：\n";
 		cin >> Name;
-		while (StudentList->next != NULL && strcmp(StudentList->name, Name) != 0)
+		while (StudentList != NULL && strcmp(StudentList->name, Name) != 0)
 		{
 			StudentList = StudentList->next;
 		}
@@ -179,6 +183,7 @@ void student::change()
 	}
 	if(StudentList != NULL && check == 1)
 	{
+		cout << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << '\n' << endl;
 		cout << "你希望修改学生的哪一项信息 ? :\n";
 		cout << "|1  学号   |\n";
 		cout << "|2  姓名   |\n";
@@ -208,6 +213,7 @@ void student::change()
 			cout << "修改成功!\n";
 			break;
 		}
+		cout << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << '\n' << endl;
 	}
 	return;
 }
@@ -227,7 +233,7 @@ int student::del()
 		check = 1;
 		cout << "请输入学号：\n";
 		cin >> ID;
-		while (StudentList->next != NULL && StudentList->id != ID)
+		while (StudentList != NULL && StudentList->id != ID)
 		{
 			StudentList2 = StudentList;
 			StudentList = StudentList->next;
@@ -242,7 +248,7 @@ int student::del()
 		check = 1;
 		cout << "请输入姓名：\n";
 		cin >> Name;
-		while (StudentList->next != NULL && strcmp(StudentList->name, Name) != 0)
+		while (StudentList != NULL && strcmp(StudentList->name, Name) != 0)
 		{
 			StudentList2 = StudentList;
 			StudentList = StudentList->next;
@@ -259,6 +265,7 @@ int student::del()
 	}
 	if(StudentList!=NULL&&check==1)
 	{
+		cout << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << '\n' << endl;
 		cout << "删除成功 !\n";
 		if (StudentList == head)
 		{
@@ -339,11 +346,9 @@ void student::view(int num)
 	{
 		n++;
 		cout.setf(ios::left);
-		cout.width(12);
 		outfile.setf(ios::left);
-		outfile.width(12);
-		cout <<n<<'\t'<< StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << '\n' << endl << endl;
-		outfile <<n<<'\t'<< StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << '\n' << endl << endl;
+		cout <<setw(12)<<n << setw(12) << StudentList->id << setw(12) << StudentList->name << setw(12) << StudentList->score << '\n' << endl << endl;
+		outfile << setw(12) <<n << setw(12) << StudentList->id << setw(12) << StudentList->name << setw(12) << StudentList->score << '\n' << endl << endl;
 		StudentList = StudentList->next;
 	}
 	cout << "                                                             人数：" << num << endl;
@@ -355,7 +360,7 @@ int main()
 {
 	cout << "--------------------欢迎使用学生信息统计系统----------------------\n" << endl;
 	system("pause");
-	int your_choice, stop, num;
+	int your_choice, stop, num=0;
 	stu* StudentList = head;
 	student run;//用run调用student类的成员函数 
 	outfile.open("student.txt", ios_base::out);//每次打开程序，都会自动清空student.txt中的旧内容，在向其中输入新内容 
@@ -408,15 +413,12 @@ int main()
 			break;
 		case 2:
 			run.change();
-			run.sort(num);
 			break;
 		case 3:
 			num = run.del();
-			run.sort(num);
 			break;
 		case 4:
 			num = run.add();
-			run.sort(num);
 			break;
 		case 5:
 			run.view(num);
@@ -444,7 +446,7 @@ int main()
 		}
 	}
 	outfile.close();
-	cout << "是否需要打印成绩排名表？（表格格式为txt，打印请输入1）\n";
+	cout << "是否需要打印成绩排名表？（表格格式为txt，打印请输入1	）\n";
 	cin >> your_choice;
 	if (your_choice == 1)
 	{
