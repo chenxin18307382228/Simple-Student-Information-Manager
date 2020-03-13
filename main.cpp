@@ -1,4 +1,4 @@
-﻿#pragma warning(disable:4996)
+#pragma warning(disable:4996)
 #include<iostream>
 #include<fstream>
 #include<cstring>
@@ -16,6 +16,7 @@ struct stu
 };
 /**************************
 建立“学生”类
+构造函数
 set--建立初始学生数据
 find--根据学号查找学生信息
 change--修改学生信息
@@ -23,6 +24,8 @@ del--删除学生信息
 add--增加学生
 sort--对学生成绩排名
 view--总览所有学生信息
+GradeTable--打印成绩表
+析构函数--释放动态存储空间
 ***************************/ 
 class student
 {
