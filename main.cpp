@@ -3,6 +3,8 @@
 #include<fstream>
 #include<cstring>
 #include<iomanip>
+#define StudentList element
+#define new_student new_element
 using namespace std;
 ofstream outfile;
 ofstream ouf;
@@ -14,25 +16,15 @@ struct stu
 	int score;           //score为学生成绩 
 	stu* next;           //next用于形成链表 
 };
-/**************************
-建立“学生”类
-构造函数
-set--建立初始学生数据
-find--根据学号查找学生信息
-change--修改学生信息
-del--删除学生信息
-add--增加学生
-sort--对学生成绩排名
-view--总览所有学生信息
-GradeTable--打印成绩表
-析构函数--释放动态存储空间
-***************************/ 
+//建立“学生”类 
 class student
 {
 private:
 	stu* head;
 public:
+	//num统计学生数量
 	int num=0;
+	//构造函数
 	student(stu* list_head) { head = list_head; }
 	int set();
 	void find();
@@ -42,6 +34,7 @@ public:
 	void sort(int);
 	void view(int);
 	void GradeTable();
+	//析构函数--释放动态存储空间
 	~student() 
 	{
 		stu* p = head;
@@ -54,6 +47,7 @@ public:
 		p = head = NULL;
 	}
 };
+//set--建立初始学生数据
 int student::set()
 {
 	int num = 0;           //num用于计学生个数 
@@ -95,6 +89,7 @@ int student::set()
 	outfile << "------------------------------------------------------\n";
 	return num;           //返回学生数量num 
 }
+//find--根据学号查找学生信息
 void student::find()
 {
 	int ID, choice;
@@ -153,6 +148,7 @@ void student::find()
 	}
 	return;
 }
+//change--修改学生信息
 void student::change()
 {
 	stu* StudentList =head, new_student;
@@ -232,6 +228,7 @@ void student::change()
 	}
 	return;
 }
+//del--删除学生信息
 int student::del()
 {
 	int n = 0,choice,ID,check=0;
@@ -294,6 +291,7 @@ int student::del()
 	}
 	return n;
 }
+//add--增加学生
 int student::add()
 {
 	int n = 0;
@@ -310,6 +308,7 @@ int student::add()
 	cout << "添加成功！\n";
 	return n;
 }
+//sort--对学生成绩排名
 void student::sort(int num)
 {
 	stu* StudentList1 = head, * StudentList2 = head->next;
@@ -353,6 +352,7 @@ void student::sort(int num)
 	outfile << "---------------------------------------------------------" << endl;
 	return;
 }
+//view--总览所有学生信息
 void student::view(int num)
 {
 	stu* StudentList = head;
@@ -371,6 +371,7 @@ void student::view(int num)
 	outfile << "---------------------------------------------------------" << endl;
 	return;
 }
+//GradeTable--打印成绩表
 void student::GradeTable()
 {
 	ouf.setf(ios::left);
