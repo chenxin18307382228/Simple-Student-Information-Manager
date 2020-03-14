@@ -32,7 +32,7 @@ public:
 	void find();
 	void change();
 	void del();
-    void add();
+        void add();
 	void sort();
 	void view();
 	void GradeTable();
@@ -485,7 +485,7 @@ int main()
 		}
 	}
 	outfile.close();
-	cout << "是否需要打印成绩排名表？（表格格式为txt，打印请输入1	）\n";
+	cout << "是否需要打印成绩排名表？（表格格式为txt，打印请输入1）\n";
 	cin >> your_choice;
 	if (your_choice == print)
 	{
