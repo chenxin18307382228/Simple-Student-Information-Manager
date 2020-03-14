@@ -3,8 +3,10 @@
 #include<fstream>
 #include<cstring>
 #include<iomanip>
-#define StudentList element
-#define new_student new_element
+#define choose_id 1
+#define choose_name 2
+#define choose_score 3
+#define Error default
 using namespace std;
 ofstream outfile;
 ofstream ouf;
@@ -21,18 +23,18 @@ class student
 {
 private:
 	stu* head;
-public:
 	//num统计学生数量
-	int num=0;
+	int num = 0;
+public:
 	//构造函数
-	student(stu* list_head) { head = list_head; }
+	student(stu* list_head) { head = list_head; num = 0;}
 	int set();
 	void find();
 	void change();
-	int del();
-	int add();
-	void sort(int);
-	void view(int);
+	void del();
+    void add();
+	void sort();
+	void view();
 	void GradeTable();
 	//析构函数--释放动态存储空间
 	~student() 
@@ -50,7 +52,6 @@ public:
 //set--建立初始学生数据
 int student::set()
 {
-	int num = 0;           //num用于计学生个数 
 	stu* StudentList1, * StudentList2;
 	head = NULL;
 	StudentList1 = new stu;
@@ -87,6 +88,7 @@ int student::set()
 		StudentList1 = StudentList1->next;
 	}
 	outfile << "------------------------------------------------------\n";
+	num--;
 	return num;           //返回学生数量num 
 }
 //find--根据学号查找学生信息
@@ -102,7 +104,7 @@ void student::find()
 	cin >> choice;
 	switch (choice)
 	{
-	case 1:
+	case choose_id:
 		cout << "请输入学号：\n";
 		cin >> ID;
 		while (StudentList != NULL)
@@ -122,7 +124,7 @@ void student::find()
 			cout << "或许，你可以通过“添加”功能新建学生信息\n";
 		}
 		break;
-	case 2:
+	case choose_name:
 		cout << "请输入姓名：\n";
 		cin >> Name;
 		while (StudentList != NULL)
@@ -142,7 +144,7 @@ void student::find()
 			cout << "或许，你可以通过“添加”功能新建学生信息\n";
 		}
 		break;
-	default:
+	Error:
 		cout << "Error!!\n";
 		break;
 	}
@@ -160,7 +162,7 @@ void student::change()
 	cin >> choice;
 	switch (choice)
 	{
-	case 1:
+	case choose_id:
 		check = 1;
 		cout << "请输入学号：\n";
 		cin >> ID;
@@ -174,7 +176,7 @@ void student::change()
 			cout << "或许，你可以通过“添加”功能新建学生信息\n";
 		}
 		break;
-	case 2:
+	case choose_name:
 		check = 1;
 		cout << "请输入姓名：\n";
 		cin >> Name;
@@ -188,7 +190,7 @@ void student::change()
 			cout << "或许，你可以通过“添加”功能新建学生信息\n";
 		}
 		break;
-	default:
+	Error:
 		cout << "Error!!\n";
 		break;
 	}
@@ -202,26 +204,29 @@ void student::change()
 		cin >> change_choice;
 		switch (change_choice)
 		{
-		case 1:
+		case choose_id:
 			cout << "请输入新学号: ";
 			cin >> new_student.id;
 			cout << "结果:\n";
 			StudentList->id = new_student.id;
 			cout << "修改成功!\n";
 			break;
-		case 2:
+		case choose_name:
 			cout << "请输入新姓名: ";
 			cin >> new_student.name;
 			cout << "结果:\n";
 			strcpy(StudentList->name, new_student.name);
 			cout << "修改成功 !\n";
 			break;
-		case 3:
+		case choose_score:
 			cout << "请输入新成绩: ";
 			cin >> new_student.score;
 			cout << "结果:\n";
 			StudentList->score = new_student.score;
 			cout << "修改成功!\n";
+			break;
+		Error:
+			cout << "Error!!!\n";
 			break;
 		}
 		cout << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << '\n' << endl;
@@ -229,7 +234,7 @@ void student::change()
 	return;
 }
 //del--删除学生信息
-int student::del()
+void student::del()
 {
 	int n = 0,choice,ID,check=0;
 	char Name[20];
@@ -241,7 +246,7 @@ int student::del()
 	cin >> choice;
 	switch (choice)
 	{
-	case 1:
+	case choose_id:
 		check = 1;
 		cout << "请输入学号：\n";
 		cin >> ID;
@@ -256,7 +261,7 @@ int student::del()
 			cout << "或许，你可以通过“添加”功能新建学生信息\n";
 		}
 		break;
-	case 2:
+	case choose_name:
 		check = 1;
 		cout << "请输入姓名：\n";
 		cin >> Name;
@@ -271,7 +276,7 @@ int student::del()
 			cout << "或许，你可以通过“添加”功能新建学生信息\n";
 		}
 		break;
-	default:
+	Error:
 		cout << "Error!!\n";
 		break;
 	}
@@ -288,11 +293,12 @@ int student::del()
 			StudentList2->next = StudentList->next;
 		}
 		delete StudentList;
+		num--;
 	}
-	return n;
+	return;
 }
 //add--增加学生
-int student::add()
+void student::add()
 {
 	int n = 0;
 	stu* StudentList = head, * new_student;
@@ -306,10 +312,11 @@ int student::add()
 	StudentList->next = new_student;
 	new_student->next = NULL;
 	cout << "添加成功！\n";
-	return n;
+	num++;
+	return;
 }
 //sort--对学生成绩排名
-void student::sort(int num)
+void student::sort()
 {
 	stu* StudentList1 = head, * StudentList2 = head->next;
 	int t_id = 0, t_score = 0, n = 1;
@@ -353,29 +360,17 @@ void student::sort(int num)
 	return;
 }
 //view--总览所有学生信息
-void student::view(int num)
+void student::view()
 {
-	stu* StudentList = head;
-	int n = 0;
-	while (StudentList != NULL)
-	{
-		n++;
-		cout.setf(ios::left);
-		outfile.setf(ios::left);
-		cout <<setw(12)<<n << setw(12) << StudentList->id << setw(12) << StudentList->name << setw(12) << StudentList->score << '\n' << endl << endl;
-		outfile << setw(12) <<n << setw(12) << StudentList->id << setw(12) << StudentList->name << setw(12) << StudentList->score << '\n' << endl << endl;
-		StudentList = StudentList->next;
-	}
-	cout << "                                                             人数：" << num << endl;
-	outfile << "                                                             人数：" << num << endl;
-	outfile << "---------------------------------------------------------" << endl;
+	sort();
+	cout << "                                                              人数："<<num << endl;
 	return;
 }
 //GradeTable--打印成绩表
 void student::GradeTable()
 {
 	ouf.setf(ios::left);
-	sort(num);
+	sort();
 	num = 0;
 	stu* StudentList = head;
 	ouf.open("GradeTable.txt", ios_base::out);
@@ -389,6 +384,16 @@ void student::GradeTable()
 	}
 	ouf.close();
 }
+#undef choose_id
+#undef choose_name
+#undef choose_score
+#define choose_find 1
+#define choose_change 2
+#define choose_del 3
+#define choose_add 4
+#define choose_view 5
+#define choose_exit 0
+#define print 1
 int main()
 {
 	cout << "--------------------欢迎使用学生信息统计系统----------------------\n" << endl;
@@ -427,7 +432,7 @@ int main()
 			break;
 		}
 	}
-	run.sort(num);
+	run.sort();
 	while (true)
 	{
 		system("pause");
@@ -442,23 +447,23 @@ int main()
 		cout << " _________________________________________________________________________________________________\n";
 		switch (your_choice)
 		{
-		case 1:
+		case choose_find:
 			run.find();
 			break;
-		case 2:
+		case choose_change:
 			run.change();
 			break;
-		case 3:
-			num = run.del();
+		case choose_del:
+			run.del();
 			break;
-		case 4:
-			num = run.add();
+		case choose_add:
+			run.add();
 			break;
-		case 5:
-			run.view(num);
+		case choose_view:
+			run.view();
 			break;
-		default:
-			if (your_choice == 0)
+		Error:
+			if (your_choice == choose_exit)
 			{
 				break;
 			}
@@ -468,12 +473,12 @@ int main()
 				continue;
 			}
 		}
-		if (your_choice == 0)
+		if (your_choice == choose_exit)
 		{
 			cout << "确定???\n";
 			cout << " 再次输入0继续:";
 			cin >> stop;
-			if (stop == 0)
+			if (stop == choose_exit)
 			{
 				break;
 			}
@@ -482,7 +487,7 @@ int main()
 	outfile.close();
 	cout << "是否需要打印成绩排名表？（表格格式为txt，打印请输入1	）\n";
 	cin >> your_choice;
-	if (your_choice == 1)
+	if (your_choice == print)
 	{
 		run.GradeTable();
 	}
