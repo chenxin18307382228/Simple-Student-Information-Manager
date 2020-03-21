@@ -6,7 +6,7 @@ The reason why I say it is simple is its function is simple . You can only set u
 I'm looking forward to your comments . Thank you .
 
 
-···c++
+```c++
 #pragma warning(disable:4996)
 #include<iostream>
 #include<fstream>
