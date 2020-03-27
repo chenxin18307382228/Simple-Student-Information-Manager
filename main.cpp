@@ -371,7 +371,7 @@ void student::add()
 	tail = StudentList;
 	return;
 }
-//sort--对学生成绩进行排名（快速排序），正在研发过程中...
+//sort--对学生成绩进行排名（快速排序）
 void student::sort(stu* head, stu* tail)
 {
 	if (head == tail || head == NULL || head == tail->next)
@@ -396,13 +396,6 @@ void student::sort(stu* head, stu* tail)
 	sort(head, key);
 	sort(StudentList1->next, tail);
 }
-
-/********************************************************************************************************
-I strongly advise you to copy your data structure in a std::vector, sort the vector with std::sort,     * 
-and then build a new linked list from the sorted vector. This should be much faster although is require *
-a more memory. Moreover, prefer using std::list than handmade linked lists. Finally, std::listcontains  *
-a sort method that do what you want.—— Jérôme Richard from Stackoverflow                              *
-*********************************************************************************************************/
 //view--总览所有学生信息
 void student::view()
 {
