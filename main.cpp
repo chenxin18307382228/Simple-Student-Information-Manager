@@ -52,7 +52,7 @@ public:
 	void find();
 	void change();
 	void del();
-    void add();
+        void add();
 	void sort(stu*, stu*);
 	void view();
 	void GradeTable();
