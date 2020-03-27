@@ -19,6 +19,8 @@ I'm looking forward to your comments . Thank you .
 using namespace std;
 ofstream outfile;
 ofstream ouf;
+//num用于统计学生数量
+int num;
 //定义stu链表，head为首地址 
 struct stu
 {
@@ -27,22 +29,42 @@ struct stu
 	int score;           //score为学生成绩 
 	stu* next;           //next用于形成链表 
 };
+//交换函数
+void swap(stu *Student1,stu *Student2)
+{
+	int t_id = 0, t_score = 0;
+	char t_name[10] = "000";
+	//学号对换 
+	t_id = Student1->id;
+	Student1->id = Student2->id;
+	Student2->id = t_id;
+	//名字对换
+	strcpy(t_name, Student1->name);
+	strcpy(Student1->name, Student2->name);
+	strcpy(Student2->name, t_name);
+	//成绩对换
+	t_score = Student1->score;
+	Student1->score = Student2->score;
+	Student2->score = t_score;
+}
+
 //建立“学生”类 
 class student
 {
 private:
 	stu* head;
-	//num统计学生数量
-	int num = 0;
+	stu* tail;
 public:
 	//构造函数
-	student(stu* list_head) { head = list_head; num = 0;}
+	student(stu* list_head) { tail = head = list_head; num = 0;}
+	int address(stu*);
+	void move(int,stu*);
 	int set();
 	void find();
 	void change();
 	void del();
-        void add();
-	void sort();
+    void add();
+	void sort(stu*, stu*);
 	void view();
 	void GradeTable();
 	//析构函数--释放动态存储空间
@@ -58,6 +80,27 @@ public:
 		p = head = NULL;
 	}
 };
+//返回指定位置的下标
+int student::address(stu* StudentList)
+{
+	int temp = 0;
+	stu* test = head;
+	for (temp = 0; test != StudentList; temp++)
+	{
+		test = test->next;
+	}
+	return temp;
+}
+//将首指针移动到指定位置
+void student::move(int loc, stu* StudentList1)
+{
+	int i = 0;
+	for (i = 0; i < loc&&StudentList1!=NULL; i++)
+	{
+		StudentList1 = StudentList1->next;
+	}
+	return;
+}
 //set--建立初始学生数据
 int student::set()
 {
@@ -89,6 +132,7 @@ int student::set()
 		cin >> StudentList1->id >> StudentList1->name >> StudentList1->score;
 	}
 	StudentList2->next = NULL;
+	tail = StudentList2;
 	StudentList1 = head;
 	cout << "建立成功！\n";
 	while (StudentList1 != NULL)
@@ -304,6 +348,12 @@ void student::del()
 		delete StudentList;
 		num--;
 	}
+	StudentList2 = head;
+	while (StudentList2->next != NULL)
+	{
+		StudentList2 = StudentList2->next;
+	}
+	tail = StudentList2;
 	return;
 }
 //add--增加学生
@@ -322,56 +372,64 @@ void student::add()
 	new_student->next = NULL;
 	cout << "添加成功！\n";
 	num++;
+	StudentList = head;
+	while (StudentList->next != NULL)
+	{
+		StudentList = StudentList->next;
+	}
+	tail = StudentList;
 	return;
 }
-//sort--对学生成绩排名
-void student::sort()
+//sort--对学生成绩进行排名（快速排序），正在研发过程中...
+void student::sort(stu* head, stu* tail)
 {
-	stu* StudentList1 = head, * StudentList2 = head->next;
-	int t_id = 0, t_score = 0, n = 1;
-	char t_name[10]="000";
-	cout << "结果:\n";
-	for (int i=0;i<num-1;i++)
-	{
-		StudentList1 = head, StudentList2 = StudentList1->next;
-		for (int j = 0; j < num - i - 1&&StudentList2!=NULL;j++)
-		{
-			if (StudentList1->score < StudentList2->score&&StudentList2!=NULL)
-			{
-				//学号对换 
-				t_id = StudentList1->id;
-				StudentList1->id = StudentList2->id;
-				StudentList2->id = t_id;
-				//名字对换
-				strcpy(t_name, StudentList1->name);
-				strcpy(StudentList1->name, StudentList2->name);
-				strcpy(StudentList2->name, t_name);
-				//成绩对换
-				t_score = StudentList1->score;
-				StudentList1->score = StudentList2->score;
-				StudentList2->score = t_score;
-			}
+	if (head == tail || head == NULL || head == tail->next)
+		return; // 递归出口
+	stu* StudentList1, * StudentList2, * key;
+	StudentList1 = StudentList2 = key = head;
+	while (StudentList2 != tail)
+	{		
+		StudentList2 = StudentList2->next; // 对于一个链表只遍历一遍
+		if (StudentList2->score > head->score) 
+		{			
+			// 如果StudentList2的值大于base则放在p左边
+			key = StudentList1;
 			StudentList1 = StudentList1->next;
-			StudentList2 = StudentList1->next;
+			swap(StudentList1, StudentList2);
 		}
 	}
-	StudentList1 = head;
+	// 执行while完毕后的情况：
+	// base在head,[head->next,StudentList1]小于base,[StudentList2->next,tail]大于base
+	swap(head, StudentList1);
+	// 将base放在最终位置
+	sort(head, key);
+	sort(StudentList1->next, tail);
+}
+
+/********************************************************************************************************
+I strongly advise you to copy your data structure in a std::vector, sort the vector with std::sort,     * 
+and then build a new linked list from the sorted vector. This should be much faster although is require *
+a more memory. Moreover, prefer using std::list than handmade linked lists. Finally, std::listcontains  *
+a sort method that do what you want.—— Jérôme Richard from Stackoverflow                              *
+*********************************************************************************************************/
+//view--总览所有学生信息
+void student::view()
+{
+	sort(head,tail);
+	cout << "结果：\n";
+	int n = 1;
+	stu* StudentList1 = head;
 	while (StudentList1 != NULL)
 	{
 		cout.setf(ios::left);
 		outfile.setf(ios::left);
-		cout <<setw(12)<<n << setw(12) << StudentList1->id << setw(12) << StudentList1->name << setw(12) << StudentList1->score << '\n' << endl << endl;
-		outfile << setw(12) <<n << setw(12) << StudentList1->id << setw(12) << StudentList1->name << setw(12) << StudentList1->score << '\n' << endl << endl;
+		cout << setw(12) << n << setw(12) << StudentList1->id << setw(12) << StudentList1->name << setw(12) << StudentList1->score << '\n' << endl << endl;
+		outfile << setw(12) << n << setw(12) << StudentList1->id << setw(12) << StudentList1->name << setw(12) << StudentList1->score << '\n' << endl << endl;
 		n++;
 		StudentList1 = StudentList1->next;
 	}
 	outfile << "---------------------------------------------------------" << endl;
 	return;
-}
-//view--总览所有学生信息
-void student::view()
-{
-	sort();
 	cout << "                                                              人数："<<num << endl;
 	return;
 }
@@ -379,7 +437,7 @@ void student::view()
 void student::GradeTable()
 {
 	ouf.setf(ios::left);
-	sort();
+	sort(head,tail);
 	num = 0;
 	stu* StudentList = head;
 	ouf.open("GradeTable.txt", ios_base::out);
@@ -393,6 +451,7 @@ void student::GradeTable()
 	}
 	ouf.close();
 }
+
 #undef choose_id
 #undef choose_name
 #undef choose_score
@@ -433,7 +492,7 @@ int main()
 			}
 			else
 			{
-				exit(0);
+				exit(1);
 			}
 		}
 		else
@@ -441,7 +500,6 @@ int main()
 			break;
 		}
 	}
-	run.sort();
 	while (true)
 	{
 		system("pause");
@@ -494,7 +552,7 @@ int main()
 		}
 	}
 	outfile.close();
-	cout << "是否需要打印成绩排名表？（表格格式为txt，打印请输入1）\n";
+	cout << "是否需要打印成绩排名表？（表格格式为txt，打印请输入1	）\n";
 	cin >> your_choice;
 	if (your_choice == print)
 	{
@@ -502,3 +560,4 @@ int main()
 	}
 	return 0;
 }
+```
