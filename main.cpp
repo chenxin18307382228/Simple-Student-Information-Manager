@@ -48,8 +48,6 @@ private:
 public:
 	//构造函数
 	student(stu* list_head) { tail = head = list_head; num = 0;}
-	int address(stu*);
-	void move(int,stu*);
 	int set();
 	void find();
 	void change();
@@ -71,27 +69,6 @@ public:
 		p = head = NULL;
 	}
 };
-//返回指定位置的下标
-int student::address(stu* StudentList)
-{
-	int temp = 0;
-	stu* test = head;
-	for (temp = 0; test != StudentList; temp++)
-	{
-		test = test->next;
-	}
-	return temp;
-}
-//将首指针移动到指定位置
-void student::move(int loc, stu* StudentList1)
-{
-	int i = 0;
-	for (i = 0; i < loc&&StudentList1!=NULL; i++)
-	{
-		StudentList1 = StudentList1->next;
-	}
-	return;
-}
 //set--建立初始学生数据
 int student::set()
 {
