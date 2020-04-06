@@ -103,7 +103,12 @@ int student::set()
 		StudentList2 = StudentList1;           //StudentList2向前移动
 		StudentList1 = new stu;                //继续动态分配空间
 	}
-	StudentList2->next = NULL;     //结束建立链表进程
+	//若从文件中未读取出数据
+	if (head != NULL)
+	{
+		StudentList2->next = NULL;     //结束建立链表进程
+	}
+	//标注尾指针
 	tail = StudentList2;
 	StudentList2 = NULL;
 	infile.close();
