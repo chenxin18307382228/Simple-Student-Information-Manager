@@ -103,9 +103,9 @@ int student::set()
 		StudentList2 = StudentList1;           //StudentList2向前移动
 		StudentList1 = new stu;                //继续动态分配空间
 	}
-	StudentList1 = NULL;                       //链表创建结束，将StudentList1移向NULL
-	tail = StudentList2;                       //标注尾指针
-	tail = NULL;
+	StudentList2->next = NULL;     //结束建立链表进程
+	tail = StudentList2;
+	StudentList2 = NULL;
 	infile.close();
 	//判断之前通过文件流建立链表是否成功，若成功，结束函数，返回链表长度num，反之开始初次建立链表（手动输入）
 	if (head != NULL)
@@ -578,4 +578,3 @@ int main()
 	}
 	return 0;
 }
-
