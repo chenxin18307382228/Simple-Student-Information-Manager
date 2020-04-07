@@ -65,7 +65,7 @@ public:
 			delete p;
 			p = head;
 		}
-		p = head = NULL;
+		delete head;
 	}
 };
 //set--建立初始学生信息
