@@ -449,17 +449,16 @@ void student::view()
 	//先对数据进行排序
 	sort(head,tail);
 	cout << "结果：\n";
-	int n = 0;                   //用于记录名次
+	int n;                   //用于记录名次
 	stu* StudentList1 = head;
 	cout.setf(ios::left);
 	cout << setw(12) << "名次" << setw(12) << "学号" << setw(12) << "姓名" << setw(12) << "分数" << '\n' << endl;
-	while (StudentList1 != NULL)
+	for(n = 0; n < num; n++)
 	{
-		n++;
 		cout << setw(12) << n << setw(12) << StudentList1->id << setw(12) << StudentList1->name << setw(12) << StudentList1->score << '\n' << endl;
 		StudentList1 = StudentList1->next;
 	}
-	cout << "                                                              人数："<<n << endl;
+	cout << "                                                              人数："<<num << endl;
 	return;
 }
 //GradeTable--打印成绩表
