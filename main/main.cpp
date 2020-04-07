@@ -362,11 +362,18 @@ void student::del()
 	}
 	//标注尾指针
 	StudentList2 = head;
-	while (StudentList2->next != NULL)
+	if (StudentList2 != NULL)
 	{
-		StudentList2 = StudentList2->next;
+		while (StudentList2->next != NULL)
+		{
+			StudentList2 = StudentList2->next;
+		}
+		tail = StudentList2;
 	}
-	tail = StudentList2;
+	else
+	{
+		tail = NULL;
+	}
 	return;
 }
 //add--增加学生
@@ -377,12 +384,20 @@ void student::add()
 	cout << "请输入你所要添加的学生的信息:\n";
 	cin >> new_student->id >> new_student->name >> new_student->score;
 	//在链表尾端添加学生信息
-	while (StudentList->next != NULL)
+	if (head != NULL)
 	{
-		StudentList = StudentList->next;
+		while (StudentList->next != NULL)
+		{
+			StudentList = StudentList->next;
+		}
+		StudentList->next = new_student;
+		new_student->next = NULL;
 	}
-	StudentList->next = new_student;
-	new_student->next = NULL;
+	else
+	{
+		head = new_student;
+		new_student->next = NULL;
+	}
 	cout << "添加成功！\n";
 	num++;
 	//标注尾指针
@@ -432,6 +447,7 @@ void student::view()
 	int n = 0;                   //用于记录名次
 	stu* StudentList1 = head;
 	cout.setf(ios::left);
+	cout << setw(12) << "名次" << setw(12) << "学号" << setw(12) << "姓名" << setw(12) << "分数" << '\n' << endl;
 	while (StudentList1 != NULL)
 	{
 		n++;
