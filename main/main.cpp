@@ -147,7 +147,9 @@ int student::set()
 		tail = StudentList2;
 		cout << "建立成功！\n";
 	}
-	return num-1;           //返回学生数量num 
+	sort(head, tail);
+	num--;
+	return num;           //返回学生数量num 
 }
 //find--根据学号或姓名查找指定学生信息
 void student::find()
@@ -484,6 +486,7 @@ void student::GradeTable()
 		StudentList = StudentList->next;
 	}
 	ouf.close();
+	return;
 }
 //save--保存学生信息
 void student::save()
