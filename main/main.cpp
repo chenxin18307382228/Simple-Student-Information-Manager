@@ -372,6 +372,11 @@ void student::del()
 	}
 	else
 	{
+		cout << "*********************\n";
+		cout << "*       注意！      *\n";
+		cout << "*                   *\n";
+		cout << "*   学生列表已空    *\n";
+		cout << "*********************\n";
 		tail = NULL;
 	}
 	return;
