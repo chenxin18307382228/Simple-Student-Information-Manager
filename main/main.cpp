@@ -8,7 +8,6 @@
 #define choose_score 3
 #define Error default             //输入错误
 using namespace std;
-ofstream outfile;   //用于保存信息
 //定义stu链表，head为头指针 
 struct stu
 {
@@ -470,6 +469,12 @@ void student::GradeTable()
 	num = 0;
 	stu* StudentList = head;
 	ouf.open("GradeTable.txt", ios_base::out);
+	if(!ouf)
+	{
+		cout << "抱歉，输出文件建立失败，您可以手动建立GradeTable.txt\n";
+		system("pause");
+		exit(1)
+	}
 	ouf << setw(12) << "名次" << setw(12) << "学号" << setw(12) << "姓名" << setw(12) << "分数" << '\n';
 	while (StudentList != NULL)
 	{
@@ -483,19 +488,26 @@ void student::GradeTable()
 //save--保存学生信息
 void student::save()
 {
+	ofstream outfile;   //用于保存信息
 	outfile.open("student.txt");//每次打开程序，都会自动清空student.txt中的旧内容，在向其中输入新内容 
 	if (!outfile)
 	{
-		cout << "抱歉，输出文件建立失败!\n";
-		exit(1);
+		cout << "抱歉，输出文件建立失败!您可以手动建立student.txt\n";
+		system("pause");
+		exit(1)
 	}
 	stu* StudentList = head;
-	while (StudentList->next != NULL)
+	if(head!=NULL)
 	{
-		outfile << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << endl;
-		StudentList = StudentList->next;
+		while (StudentList->next != NULL)
+	        {
+		        outfile << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << endl;
+		        StudentList = StudentList->next;
+	        }
+	        outfile << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score;
 	}
-	outfile << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score;
+	outfile.close();       //关闭存储文件
+	return;
 }
 
 #undef choose_id
@@ -594,7 +606,6 @@ int main()
 	{
 		run.save();
 	}
-	outfile.close();       //关闭存储文件
 	cout << "是否需要打印成绩排名表？（表格格式为txt，打印请输入1	）\n";
 	cin >> your_choice;
 	if (your_choice == print)
