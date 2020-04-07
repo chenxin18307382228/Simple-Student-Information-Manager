@@ -9,7 +9,6 @@
 #define Error default             //输入错误
 using namespace std;
 ofstream outfile;   //用于保存信息
-int num;            //用于统计学生数量
 //定义stu链表，head为头指针 
 struct stu
 {
@@ -41,6 +40,7 @@ void swap(stu *Student1,stu *Student2)
 class student
 {
 private:
+	int num;       //用于统计学生数量
 	stu* head;     //头指针
 	stu* tail;     //尾指针
 public:
