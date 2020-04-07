@@ -49,7 +49,8 @@ public:
 	void find();                //查找指定学生信息
 	void change();              //修改指定学生的指定信息
 	void del();                 //删除指定学生信息
-    void add();                 //添加新学生信息
+	void all_del();
+        void add();                 //添加新学生信息
 	void sort(stu*, stu*);      //对学生信息依据成绩排序
 	void view();                //信息总览
 	void GradeTable();          //打印成绩表
@@ -382,6 +383,21 @@ void student::del()
 	}
 	return;
 }
+//all_del--全体删除
+void student::all_del()
+{
+	stu* p = head;
+	while (p != NULL)
+	{
+		num--;
+		head = p->next;
+		delete p;
+		p = head;
+	}
+	delete p;
+	cout << "删除成功！\n";
+	return;
+}
 //add--增加学生
 void student::add()
 {
@@ -454,7 +470,7 @@ void student::view()
 	stu* StudentList1 = head;
 	cout.setf(ios::left);
 	cout << setw(12) << "名次" << setw(12) << "学号" << setw(12) << "姓名" << setw(12) << "分数" << '\n' << endl;
-	for(n = 0; n < num; n++)
+	for(n = 1; n < num; n++)
 	{
 		cout << setw(12) << n << setw(12) << StudentList1->id << setw(12) << StudentList1->name << setw(12) << StudentList1->score << '\n' << endl;
 		StudentList1 = StudentList1->next;
@@ -468,7 +484,6 @@ void student::GradeTable()
 	ofstream ouf;       //用于打印成绩表
 	ouf.setf(ios::left);
 	sort(head,tail);
-	num = 0;
 	stu* StudentList = head;
 	ouf.open("GradeTable.txt", ios_base::out);
 	if(!ouf)
@@ -478,10 +493,9 @@ void student::GradeTable()
 		exit(1);
 	}
 	ouf << setw(12) << "名次" << setw(12) << "学号" << setw(12) << "姓名" << setw(12) << "分数" << '\n';
-	while (StudentList != NULL)
+	for (int n = 1; StudentList != NULL; n++)
 	{
-		num++;
-		ouf << setw(12) << num << setw(12) << StudentList->id << setw(12) << StudentList->name << setw(12) << StudentList->score << '\n';
+		ouf << setw(12) << n << setw(12) << StudentList->id << setw(12) << StudentList->name << setw(12) << StudentList->score << '\n';
 		ouf << "--------------------------------------------------------------------------------------------------\n";
 		StudentList = StudentList->next;
 	}
@@ -519,8 +533,9 @@ void student::save()
 #define choose_find 1
 #define choose_change 2
 #define choose_del 3
-#define choose_add 4
-#define choose_view 5
+#define choose_all_del 4
+#define choose_add 5
+#define choose_view 6
 #define choose_exit 0
 #define print 1
 #define Save 1
@@ -559,8 +574,9 @@ int main()
 		cout << " | 1  查找   |\n";
 		cout << " | 2  修改   |\n";
 		cout << " | 3  删除   |\n";
-		cout << " | 4  添加   |\n";
-		cout << " | 5  总览   |\n";
+		cout << " | 4  全删   |\n";
+		cout << " | 5  添加   |\n";
+		cout << " | 6  总览   |\n";
 		cout << " | 0  离开   |\n";
 		cin >> your_choice;
 		cout << " _________________________________________________________________________________________________\n";
@@ -574,6 +590,9 @@ int main()
 			break;
 		case choose_del:
 			run.del();
+			break;
+		case choose_all_del:
+			run.all_del();
 			break;
 		case choose_add:
 			run.add();
