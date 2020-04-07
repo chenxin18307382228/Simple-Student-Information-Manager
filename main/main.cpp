@@ -473,7 +473,7 @@ void student::GradeTable()
 	{
 		cout << "抱歉，输出文件建立失败，您可以手动建立GradeTable.txt\n";
 		system("pause");
-		exit(1)
+		exit(1);
 	}
 	ouf << setw(12) << "名次" << setw(12) << "学号" << setw(12) << "姓名" << setw(12) << "分数" << '\n';
 	while (StudentList != NULL)
@@ -494,7 +494,7 @@ void student::save()
 	{
 		cout << "抱歉，输出文件建立失败!您可以手动建立student.txt\n";
 		system("pause");
-		exit(1)
+		exit(1);
 	}
 	stu* StudentList = head;
 	if(head!=NULL)
