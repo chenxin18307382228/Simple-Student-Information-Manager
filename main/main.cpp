@@ -420,13 +420,6 @@ void student::add()
 	}
 	cout << "添加成功！\n";
 	num++;
-	//标注尾指针
-	StudentList = head;
-	while (StudentList->next != NULL)
-	{
-		StudentList = StudentList->next;
-	}
-	tail = StudentList;
 	return;
 }
 //sort--对学生成绩进行排名（快速排序）
