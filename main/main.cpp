@@ -408,16 +408,14 @@ void student::add()
 	//在链表尾端添加学生信息
 	if (head != NULL)
 	{
-		while (StudentList->next != NULL)
-		{
-			StudentList = StudentList->next;
-		}
-		StudentList->next = new_student;
+		tail->next = new_student;
+		tail = New_student;
 		new_student->next = NULL;
 	}
 	else
 	{
 		head = new_student;
+		tail = New_student;
 		new_student->next = NULL;
 	}
 	cout << "添加成功！\n";
