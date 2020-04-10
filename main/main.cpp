@@ -156,6 +156,7 @@ int student::set()
 void student::find()
 {
 	int ID, choice;
+	bool check = 0;
 	char Name[20];
 	stu* StudentList = head;
 	int n=0;                                  //记录学生名次
@@ -168,19 +169,21 @@ void student::find()
 	case choose_id:
 		cout << "请输入学号：\n";
 		cin >> ID;
+		cout << "结果：\n";
+		cout.setf(ios::left);
+		cout << setw(12) << "名次" << setw(12) << "学号" << setw(12) << "姓名" << setw(12) << "分数" << '\n' << endl;
 		while (StudentList != NULL)
 		{
 			n++;
 			if (StudentList->id == ID)
 			{
-				cout << "学生信息如下：\n";
-				cout << n << '\t' << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << '\n' << endl;
-				break;
+				check = 1;
+				cout << setw(12) << n << setw(12) << StudentList->id << setw(12) << StudentList->name << setw(12) << StudentList->score << '\n' << endl;
 			}
 			StudentList = StudentList->next;
 		}
 		//若未找到指定学生
-		if (StudentList == NULL)
+		if (check == 0)
 		{
 			cout << "抱歉，未找到此学生信息\n";
 			cout << "或许，你可以通过“添加”功能新建学生信息\n";
@@ -189,18 +192,20 @@ void student::find()
 	case choose_name:
 		cout << "请输入姓名：\n";
 		cin >> Name;
+		cout << "结果：\n";
+		cout.setf(ios::left);
+		cout << setw(12) << "名次" << setw(12) << "学号" << setw(12) << "姓名" << setw(12) << "分数" << '\n' << endl;
 		while (StudentList != NULL)
 		{
 			n++;
 			if(strcmp(StudentList->name,Name)==0)
 			{
-				cout << "学生信息如下：\n";
-				cout << n << '\t' << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << '\n' << endl;
-				break;
+				check = 1;
+				cout << setw(12) << n << setw(12) << StudentList->id << setw(12) << StudentList->name << setw(12) << StudentList->score << '\n' << endl;
 			}
 			StudentList = StudentList->next;
 		}
-		if (StudentList == NULL)
+		if (check == 0)
 		{
 			cout << "抱歉，未找到此学生信息\n";
 			cout << "或许，你可以通过“添加”功能新建学生信息\n";
