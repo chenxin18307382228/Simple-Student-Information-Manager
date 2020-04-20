@@ -1,6 +1,21 @@
-# Simple-Student-Information-Manager
-This is the first project of a freshman . Actually , this is my final assignment of the first term in college .
-
-The reason why I say it is simple is its function is simple . You can only set up students'information and find , change , delete , insert sort and save information , but you can't store information . In the days to come , I 'll learn more to improve my professional level . I will also continue to optimize the code and enrich my GitHub . 
-
-I'm looking forward to your comments . Thank you .
+# 简易学生信息管理系统
+## 前言
+* 这原本是我的大一C++程序设计的期末大作业，之后学习了数据结构，我就根据课堂所学对它进行了修改，就是这样。
+* 学生信息包括学号、姓名、成绩、排名四项。
+## 功能
+* 1、账户式管理
+  * 该程序需要先创建账户才能使用，（虽然这个账户的安全性并不是很好哈哈哈），每一个账户对应一套学生信息，学生信息由用户自己创建，这些操作由文件流（.txt）实现.
+* 2、查找
+  * 用户可以通过学号或者姓名查找学生信息，如果没找到就会很耿直地告诉你没有这个人。
+* 3、修改
+  * 修改之前，用户先查找要修改的学生，此查找过程与查找功能类似，然后再修改学号、姓名、成绩当中的一项。
+* 4、删除
+  * 删除分为单个删除和全删，单个删除也是现要查找，再将找到的学生删除。
+* 5、添加
+  * 添加时只需连续地输入学号、姓名、成绩（中间用空格隔开）即可。
+* 6、打印排名表
+  * 此操作在即将结束程序时完成，成绩表为记事本格式（水平有限，能力一般）。
+## 其他说明
+* 建立学生信息时，要依次输入学号、姓名、成绩，中间用空格隔开，在按Enter继续；
+* 除了GradeTable.txt文件，其他记事本一定不要贸然打开并修改，当然如果您有十足的把握的话也没关系，反正并不复杂；
+* 这是我的第一个Github版本库，很开心能加入这个社区，希望日后我能在这个社区里学到很多知识，并融入到这个社区中，谢谢您。
