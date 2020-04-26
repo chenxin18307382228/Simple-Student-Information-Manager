@@ -356,6 +356,20 @@ bool user::sign_in()
 	Users exist[100] = {"\0","\0","\0"};         //读取collection.txt内的所有用户信息，用于登录时判断用户是否存在
 	ifstream cin_collection;                     //读取用户的信息，用于登录操作
 	ofstream user_save;                          //对学生信息存档
+	int save_num = 0;                            //存档个数
+	cin_collection.open("collection.txt");
+	if (!cin_collection)
+	{
+		cout << "请先建立“user.txt”文件\n";
+		system("pause");
+		exit(1);
+	}
+	for (int i = 0; cin_collection.peek() != EOF; i++)
+	{
+		cin_collection >> exist[i].username >> exist[i].password >> exist[i].filename;
+		save_num++;
+	}
+	save_num--;
 	cout << "请选择：\n";
 	cout << "     |   1、登录    |\n";
 	cout << "     |   2、注册    |\n";
@@ -364,8 +378,19 @@ bool user::sign_in()
 	{
 		system("cls");
 	case choose_sign_in:
-		cout << "新用户名：";
-		cin>>messi.username;
+		for (int i = 0; i < save_num;)
+		{
+			cout << "新用户名：";
+			cin >> messi.username;
+			for (; i < save_num; i++)
+			{
+				if (!strcmp(messi.username, exist[i].username))
+				{
+					cout << "用户名已存在！\n";
+					break;
+				}
+			}
+		}
 		strcpy(messi.filename, messi.username);
 		strcat(messi.filename, ".txt");
 		while (!check)
@@ -394,17 +419,6 @@ bool user::sign_in()
 		user_save.open(messi.filename);
 		break;
 	case choose_log_in:
-		cin_collection.open("collection.txt");
-		if (!cin_collection)
-		{
-			cout << "请先建立“user.txt”文件\n";
-			system("pause");
-			exit(1);
-		}
-		for (int i = 0; cin_collection.peek() != EOF; i++)
-		{
-			cin_collection>>exist[i].username>>exist[i].password>>exist[i].filename;
-		}
 		cout << "用户名：";
 		cin >> test_name;
 		cout << endl;
