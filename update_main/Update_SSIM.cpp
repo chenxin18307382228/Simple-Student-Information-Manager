@@ -4,19 +4,19 @@
 #include<cstring>
 #include<iomanip>
 #include<conio.h>
-#define choose_id 1
-#define choose_name 2
-#define choose_score 3
+#define choose_id '1'
+#define choose_name '2'
+#define choose_score '3'
 #define Error default             //输入错误
 using namespace std;
 //定义stu链表，head为头指针 
-struct stu
+typedef struct element
 {
 	int id;              //id为学生学号 
 	char name[100];      //name为学生姓名 
 	int score;           //score为学生成绩 
-	stu* next;           //next用于形成链表 
-};
+	element* next;           //next用于形成链表 
+}stu;
 //用户
 struct Users
 {
@@ -25,43 +25,43 @@ struct Users
 	char filename[20];        //存档名
 };
 //交换函数
-void swap(stu* Student1, stu* Student2)
+void swap(element* ElementType1, element* ElementType2)
 {
 	int t_id = 0, t_score = 0;
 	char t_name[10] = "000";
 	//学号对换 
-	t_id = Student1->id;
-	Student1->id = Student2->id;
-	Student2->id = t_id;
+	t_id = ElementType1->id;
+	ElementType1->id = ElementType2->id;
+	ElementType2->id = t_id;
 	//名字对换
-	strcpy(t_name, Student1->name);
-	strcpy(Student1->name, Student2->name);
-	strcpy(Student2->name, t_name);
+	strcpy(t_name, ElementType1->name);
+	strcpy(ElementType1->name, ElementType2->name);
+	strcpy(ElementType2->name, t_name);
 	//成绩对换
-	t_score = Student1->score;
-	Student1->score = Student2->score;
-	Student2->score = t_score;
+	t_score = ElementType1->score;
+	ElementType1->score = ElementType2->score;
+	ElementType2->score = t_score;
 }
 
 //建立“学生”类 
-class student
+typedef class ElementList
 {
 protected:
 	int num = 0;       //用于统计学生数量
-	stu* head = NULL;     //头指针
-	stu* tail = NULL;     //尾指针
+	element* head = NULL;     //头指针
+	element* tail = NULL;     //尾指针
 public:
-	void find();                //查找指定学生信息
+	element* find();                //查找指定学生信息
 	void change();              //修改指定学生的指定信息
 	void del();                 //删除指定学生信息
 	void all_del();             //全部删除
 	void add();                 //添加新学生信息
-	void sort(stu*, stu*);      //对学生信息依据成绩排序
+	void sort(element*, element*);      //对学生信息依据成绩排序
 	void view();                //信息总览
 	//析构函数--释放动态存储空间
-	~student()
+	~ElementList()
 	{
-		stu* p = head;
+		element* p = head;
 		while (p != NULL)
 		{
 			head = p->next;
@@ -70,14 +70,14 @@ public:
 		}
 		delete head;
 	}
-};
+}student;
 //find--根据学号或姓名查找指定学生信息
-void student::find()
+element* ElementList::find()
 {
-	int ID, choice;
+	int ID;
 	bool check = 0;
-	char Name[20];
-	stu* StudentList = head;
+	char Name[20], choice;
+	element* ElementType = head;
 	int n = 0;                                  //记录学生名次
 	cout << "您想通过哪一项信息查找？\n";
 	cout << "|1 学号    |\n";
@@ -91,15 +91,16 @@ void student::find()
 		cout << "结果：\n";
 		cout.setf(ios::left);
 		cout << setw(12) << "名次" << setw(12) << "学号" << setw(12) << "姓名" << setw(12) << "分数" << '\n' << endl;
-		while (StudentList != NULL)
+		while (ElementType != NULL)
 		{
 			n++;
-			if (StudentList->id == ID)
+			if (ElementType->id == ID)
 			{
-				cout << setw(12) << n << setw(12) << StudentList->id << setw(12) << StudentList->name << setw(12) << StudentList->score << '\n' << endl;
+				cout << setw(12) << n << setw(12) << ElementType->id << setw(12) << ElementType->name << setw(12) << ElementType->score << '\n' << endl;
 				check = 1;
+				break;
 			}
-			StudentList = StudentList->next;
+			ElementType = ElementType->next;
 		}
 		//若未找到指定学生
 		if (check == 0)
@@ -114,15 +115,16 @@ void student::find()
 		cout << "结果：\n";
 		cout.setf(ios::left);
 		cout << setw(12) << "名次" << setw(12) << "学号" << setw(12) << "姓名" << setw(12) << "分数" << '\n' << endl;
-		while (StudentList != NULL)
+		while (ElementType != NULL)
 		{
 			n++;
-			if (strcmp(StudentList->name, Name) == 0)
+			if (strcmp(ElementType->name, Name) == 0)
 			{
-				cout << setw(12) << n << setw(12) << StudentList->id << setw(12) << StudentList->name << setw(12) << StudentList->score << '\n' << endl;
+				cout << setw(12) << n << setw(12) << ElementType->id << setw(12) << ElementType->name << setw(12) << ElementType->score << '\n' << endl;
 				check = 1;
+				break;
 			}
-			StudentList = StudentList->next;
+			ElementType = ElementType->next;
 		}
 		if (check == 0)
 		{
@@ -134,167 +136,88 @@ void student::find()
 		cout << "Error!!\n";
 		break;
 	}
-	return;
+	return ElementType;
 }
 //change--修改学生信息
-void student::change()
+void ElementList::change()
 {
-	stu* StudentList = head, new_student;
-	int choice, change_choice, ID;    //choice为查找信息选项，change_choice为修改信息选项
+	element* ElementType = head, new_student;
+	char choice;                       //choice为修改信息选项
 	bool check = 0;                   //判断是否找到
-	char Name[20];
-	cout << "首先，您想通过哪一项信息查找？\n";
-	cout << "|1 学号    |\n";
-	cout << "|2 姓名    |\n";
-	cin >> choice;
-	//查找指定学生
-	switch (choice)
-	{
-	case choose_id:
-		check = 1;
-		cout << "请输入学号：\n";
-		cin >> ID;
-		while (StudentList != NULL && StudentList->id != ID)
-		{
-			StudentList = StudentList->next;
-		}
-		if (StudentList == NULL)
-		{
-			cout << "抱歉，未找到此学生信息\n";
-			cout << "或许，你可以通过“添加”功能新建学生信息\n";
-		}
-		break;
-	case choose_name:
-		check = 1;
-		cout << "请输入姓名：\n";
-		cin >> Name;
-		while (StudentList != NULL && strcmp(StudentList->name, Name) != 0)
-		{
-			StudentList = StudentList->next;
-		}
-		if (StudentList == NULL)
-		{
-			cout << "抱歉，未找到此学生信息\n";
-			cout << "或许，你可以通过“添加”功能新建学生信息\n";
-		}
-		break;
-	Error:
-		cout << "Error!!\n";
-		break;
-	}
+	ElementType = find();
 	//若找到，进入信息修改进程
-	if (StudentList != NULL && check == 1)
+	if (ElementType != NULL)
 	{
-		cout << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << '\n' << endl;
+		cout << ElementType->id << '\t' << ElementType->name << '\t' << ElementType->score << '\n' << endl;
 		cout << "你希望修改学生的哪一项信息 ? :\n";
 		cout << "|1  学号   |\n";
 		cout << "|2  姓名   |\n";
 		cout << "|3  成绩   |\n";
-		cin >> change_choice;
-		switch (change_choice)
+		cin >> choice;
+		switch (choice)
 		{
 		case choose_id:
 			cout << "请输入新学号: ";
 			cin >> new_student.id;
 			cout << "结果:\n";
-			StudentList->id = new_student.id;
+			ElementType->id = new_student.id;
 			cout << "修改成功!\n";
 			break;
 		case choose_name:
 			cout << "请输入新姓名: ";
 			cin >> new_student.name;
 			cout << "结果:\n";
-			strcpy(StudentList->name, new_student.name);
+			strcpy(ElementType->name, new_student.name);
 			cout << "修改成功 !\n";
 			break;
 		case choose_score:
 			cout << "请输入新成绩: ";
 			cin >> new_student.score;
 			cout << "结果:\n";
-			StudentList->score = new_student.score;
+			ElementType->score = new_student.score;
 			cout << "修改成功!\n";
 			break;
 		Error:
 			cout << "Error!!!\n";
 			return;
 		}
-		cout << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << '\n' << endl;
+		cout << ElementType->id << '\t' << ElementType->name << '\t' << ElementType->score << '\n' << endl;
 	}
 	return;
 }
 //del--删除学生信息
-void student::del()
+void ElementList::del()
 {
-	int n = 0, choice, ID;
+	int n = 0, choice = 0;
 	bool check = 0;                //判断是否找到
-	char Name[20];
-	stu* StudentList = head, * StudentList2 = head;
+	element* ElementType1 = head, * ElementType2 = head;
 	cout << "结果:\n";
-	cout << "首先，您想通过哪一项信息查找？\n";
-	cout << "|1 学号    |\n";
-	cout << "|2 姓名    |\n";
-	cin >> choice;
-	switch (choice)
-	{
-	case choose_id:
-		check = 1;
-		cout << "请输入学号：\n";
-		cin >> ID;
-		while (StudentList != NULL && StudentList->id != ID)
-		{
-			StudentList2 = StudentList;
-			StudentList = StudentList->next;
-		}
-		if (StudentList == NULL)
-		{
-			cout << "抱歉，未找到此学生信息\n";
-			cout << "或许，你可以通过“添加”功能新建学生信息\n";
-		}
-		break;
-	case choose_name:
-		check = 1;
-		cout << "请输入姓名：\n";
-		cin >> Name;
-		while (StudentList != NULL && strcmp(StudentList->name, Name) != 0)
-		{
-			StudentList2 = StudentList;
-			StudentList = StudentList->next;
-		}
-		if (StudentList == NULL)
-		{
-			cout << "抱歉，未找到此学生信息\n";
-			cout << "或许，你可以通过“添加”功能新建学生信息\n";
-		}
-		break;
-	Error:
-		cout << "Error!!\n";
-		break;
-	}
+	ElementType1 = find();
 	//若找到，进入删除进程
-	if (StudentList != NULL && check == 1)
+	if (ElementType1 != NULL)
 	{
-		cout << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << '\n' << endl;
+		for (; ElementType2->next != ElementType1; ElementType2 = ElementType2->next);
 		cout << "删除成功 !\n";
-		if (StudentList == head)          //若要删除的学生为链表中的第一位学生，则头指针后移
+		if (ElementType1 == head)          //若要删除的学生为链表中的第一位学生，则头指针后移
 		{
 			head = head->next;
 		}
 		else
 		{
-			StudentList2->next = StudentList->next;
+			ElementType2->next = ElementType1->next;
 		}
-		delete StudentList;
+		delete ElementType1;
 		num--;
 	}
 	//标注尾指针
-	StudentList2 = head;
-	if (StudentList2 != NULL)
+	ElementType2 = head;
+	if (ElementType2 != NULL)
 	{
-		while (StudentList2->next != NULL)
+		while (ElementType2->next != NULL)
 		{
-			StudentList2 = StudentList2->next;
+			ElementType2 = ElementType2->next;
 		}
-		tail = StudentList2;
+		tail = ElementType2;
 	}
 	else
 	{
@@ -308,9 +231,9 @@ void student::del()
 	return;
 }
 //all_del--全体删除
-void student::all_del()
+void ElementList::all_del()
 {
-	stu* p = head;
+	element* p = head;
 	while (p != NULL)
 	{
 		num--;
@@ -323,9 +246,9 @@ void student::all_del()
 	return;
 }
 //add--增加学生
-void student::add()
+void ElementList::add()
 {
-	stu* StudentList = head, * new_student;
+	element* ElementType = head, * new_student;
 	new_student = new stu;
 	cout << "请输入你所要添加的学生的信息:\n";
 	cin >> new_student->id >> new_student->name >> new_student->score;
@@ -344,59 +267,60 @@ void student::add()
 	}
 	cout << "添加成功！\n";
 	num++;
+	sort(head, tail);
 	return;
 }
 //sort--对学生成绩进行排名（快速排序）
-void student::sort(stu* head, stu* tail)
+void ElementList::sort(element* head, element* tail)
 {
 	if (head == tail || head == NULL || head == tail->next)
 	{
 		return; // 递归出口
 	}
-	stu* StudentList1, * StudentList2, * key;
-	StudentList1 = StudentList2 = key = head;
-	while (StudentList2 != tail)
+	element* ElementType1, * ElementType2, * key;
+	ElementType1 = ElementType2 = key = head;
+	while (ElementType2 != tail)
 	{
-		StudentList2 = StudentList2->next; // 对于一个链表只遍历一遍
-		if (StudentList2->score > head->score)
+		ElementType2 = ElementType2->next; // 对于一个链表只遍历一遍
+		if (ElementType2->score > head->score)
 		{
-			// 如果StudentList2的值大于key则放在左边
-			key = StudentList1;
-			StudentList1 = StudentList1->next;
-			swap(StudentList1, StudentList2);
+			// 如果ElementType2的值大于key则放在左边
+			key = ElementType1;
+			ElementType1 = ElementType1->next;
+			swap(ElementType1, ElementType2);
 		}
 	}
 	/*
 	执行while完毕后的情况：
-	key在head,[head->next,StudentList1]大于key,[StudentList2->next,tail]小于key
+	key在head,[head->next,ElementType1]大于key,[ElementType2->next,tail]小于key
 	*/
-	swap(head, StudentList1);
+	swap(head, ElementType1);
 	sort(head, key);
-	sort(StudentList1->next, tail);
+	sort(ElementType1->next, tail);
 	return;
 }
 //view--总览所有学生信息
-void student::view()
+void ElementList::view()
 {
 	//先对数据进行排序
 	sort(head, tail);
 	cout << "结果：\n";
 	int n;                   //用于记录名次
-	stu* StudentList1 = head;
+	element* ElementType1 = head;
 	cout.setf(ios::left);
 	cout << setw(12) << "名次" << setw(12) << "学号" << setw(12) << "姓名" << setw(12) << "分数" << '\n' << endl;
-	for (n = 1; StudentList1 != NULL; n++)
+	for (n = 1; ElementType1 != NULL; n++)
 	{
-		cout << setw(12) << n << setw(12) << StudentList1->id << setw(12) << StudentList1->name << setw(12) << StudentList1->score << '\n' << endl;
-		StudentList1 = StudentList1->next;
+		cout << setw(12) << n << setw(12) << ElementType1->id << setw(12) << ElementType1->name << setw(12) << ElementType1->score << '\n' << endl;
+		ElementType1 = ElementType1->next;
 	}
 	cout << "                                                              人数：" << num << endl;
 	return;
 }
-#define choose_log_in 1               //选择登录
-#define choose_sign_in 2              //选择注册
+#define choose_log_in '1'               //选择登录
+#define choose_sign_in '2'              //选择注册
 //用户类
-class user :public student
+class user :public ElementList
 {
 private:
 	Users messi;             //梅西 :）
@@ -425,7 +349,7 @@ bool user::sign_in()
 	}
 	bool check = 0;
 	char temp[7] = {'\0'};                       //用于注册时二次输入密码
-	int choice;
+	char choice;
 	char test_name[20];                          //验证登录用户名
 	char test_password[7] = {'\0'};              //验证登录密码
 	bool test_log = 0;                           //用于判断用户是否存在
@@ -534,9 +458,9 @@ bool user::sign_in()
 bool user::set()
 {
 	bool check = 0;
-	stu* StudentList1, * StudentList2;
+	stu* ElementType1, * ElementType2;
 	head = NULL;
-	StudentList2 = head;
+	ElementType2 = head;
 	ifstream infile(messi.filename);     //student.txt为学生信息存出文件，通过读取此文件，可直接获取学生信息
 	if (!infile)
 	{
@@ -546,36 +470,36 @@ bool user::set()
 	}
 	int id, score;           //id和score的中转变量
 	char name[20];           //name的中转变量
-	StudentList1 = new stu;  //首次动态分配空间
+	ElementType1 = new stu;  //首次动态分配空间
 	while (infile.peek() != EOF)   //遍历student.txt数据
 	{
 		num++;
 		infile >> id >> name >> score;       //为中转变量赋值
 		//为链表成员变量赋值
-		StudentList1->id = id;
-		strcpy(StudentList1->name, name);
-		StudentList1->score = score;
+		ElementType1->id = id;
+		strcpy(ElementType1->name, name);
+		ElementType1->score = score;
 		//判断头指针是否为空，若为空，则从头开始赋值，否则从末端开始赋值
 		if (head == NULL)
 		{
-			head = StudentList1;
+			head = ElementType1;
 		}
 		else
 		{
-			StudentList2->next = StudentList1;
+			ElementType2->next = ElementType1;
 		}
-		StudentList2 = StudentList1;           //StudentList2向前移动
-		StudentList1 = new stu;                //继续动态分配空间
+		ElementType2 = ElementType1;           //ElementType2向前移动
+		ElementType1 = new stu;                //继续动态分配空间
 	}
 	//若从文件中读取出数据
 	if (head != NULL)
 	{
 		check = 1;
-		StudentList2->next = NULL;     //结束建立链表进程
+		ElementType2->next = NULL;     //结束建立链表进程
 	}
 	//标注尾指针
-	tail = StudentList2;
-	StudentList2 = NULL;
+	tail = ElementType2;
+	ElementType2 = NULL;
 	infile.close();
 	//判断之前通过文件流建立链表是否成功，若成功，结束函数，返回链表长度num，反之开始初次建立链表（手动输入）
 	if (head != NULL)
@@ -585,32 +509,32 @@ bool user::set()
 	else
 	{
 		cout << "*********************现在建立初始学生信息**********************\n";
-		StudentList1 = new stu;
+		ElementType1 = new stu;
 		num = 1;
 		cout << "请输入第1个学生的信息（当学号为0是终止）:\n";
-		cin >> StudentList1->id >> StudentList1->name >> StudentList1->score;
-		if (StudentList1->id == 0)        //如果输入学生学号为0，则输入错误，跳出函数 
+		cin >> ElementType1->id >> ElementType1->name >> ElementType1->score;
+		if (ElementType1->id == 0)        //如果输入学生学号为0，则输入错误，跳出函数 
 		{
 			return 0;
 		}
-		while (StudentList1->id != 0)     //当输入0时结束建立 
+		while (ElementType1->id != 0)     //当输入0时结束建立 
 		{
 			num++;
 			if (head == NULL)
 			{
-				head = StudentList1;
+				head = ElementType1;
 			}
 			else
 			{
-				StudentList2->next = StudentList1;
+				ElementType2->next = ElementType1;
 			}
-			StudentList2 = StudentList1;
-			StudentList1 = new stu;
+			ElementType2 = ElementType1;
+			ElementType1 = new stu;
 			cout << "请输入第" << num << "个学生的信息（当学号为0时终止）:\n";
-			cin >> StudentList1->id >> StudentList1->name >> StudentList1->score;
+			cin >> ElementType1->id >> ElementType1->name >> ElementType1->score;
 		}
-		StudentList2->next = NULL;     //结束手动建立链表进程
-		tail = StudentList2;
+		ElementType2->next = NULL;     //结束手动建立链表进程
+		tail = ElementType2;
 		cout << "建立成功！\n";
 	}
 	if (head != NULL) { check = 1; }
@@ -625,7 +549,7 @@ void user::GradeTable()
 	ofstream ouf;       //用于打印成绩表
 	ouf.setf(ios::left);
 	sort(head, tail);
-	stu* StudentList = head;
+	stu* ElementType = head;
 	strcat(GT, messi.filename);
 	ouf.open(GT);
 	if (!ouf)
@@ -635,12 +559,12 @@ void user::GradeTable()
 		exit(1);
 	}
 	ouf << setw(12) << "名次" << setw(12) << "学号" << setw(12) << "姓名" << setw(12) << "分数" << '\n';
-	for (int n = 1; StudentList != NULL; n++)
+	for (int n = 1; ElementType != NULL; n++)
 	{
 		;
-		ouf << setw(12) << n << setw(12) << StudentList->id << setw(12) << StudentList->name << setw(12) << StudentList->score << '\n';
+		ouf << setw(12) << n << setw(12) << ElementType->id << setw(12) << ElementType->name << setw(12) << ElementType->score << '\n';
 		ouf << "--------------------------------------------------------------------------------------------------\n";
-		StudentList = StudentList->next;
+		ElementType = ElementType->next;
 	}
 	ouf.close();
 	return;
@@ -656,15 +580,15 @@ void user::save()
 		system("pause");
 		exit(1);
 	}
-	stu* StudentList = head;
+	stu* ElementType = head;
 	if (head != NULL)
 	{
-		while (StudentList->next != NULL)
+		while (ElementType->next != NULL)
 		{
-			outfile << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score << endl;
-			StudentList = StudentList->next;
+			outfile << ElementType->id << '\t' << ElementType->name << '\t' << ElementType->score << endl;
+			ElementType = ElementType->next;
 		}
-		outfile << StudentList->id << '\t' << StudentList->name << '\t' << StudentList->score;
+		outfile << ElementType->id << '\t' << ElementType->name << '\t' << ElementType->score;
 	}
 	outfile.close();       //关闭存储文件
 	return;
@@ -672,19 +596,19 @@ void user::save()
 #undef choose_id
 #undef choose_name
 #undef choose_score
-#define choose_find 1
-#define choose_change 2
-#define choose_del 3
-#define choose_all_del 4
-#define choose_add 5
-#define choose_view 6
-#define choose_exit 0
-#define print 1
-#define Save 1
+#define choose_find '1'
+#define choose_change '2'
+#define choose_del '3'
+#define choose_all_del '4'
+#define choose_add '5'
+#define choose_view '6'
+#define choose_exit '0'
+#define print '1'
+#define Save '1'
 int main()
-{
-	int your_choice, stop; //your_choice可用于选择是否重新建立链表、选择操作、选择是否保存、选择是否打印成绩表 
+{  
 	user run;//创建user对象run
+	char your_choice, stop;//your_choice可用于选择是否重新建立链表、选择操作、选择是否保存、选择是否打印成绩表
 	bool check = 0;
 	while (!check)
 	{
