@@ -697,7 +697,7 @@ int main()
 	}
 	cout << "是否保存信息？（1为是，0为否）:\n";
 	cin >> your_choice;
-	if (your_choice == 1)
+	if (your_choice == Save)
 	{
 		run.save();
 	}
