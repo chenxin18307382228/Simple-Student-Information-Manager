@@ -57,6 +57,7 @@ public:
 	void all_del();             //全部删除
 	void add();                 //添加新学生信息
 	void sort(element*, element*);      //对学生信息依据成绩排序
+	void invert();              //倒序
 	void view();                //信息总览
 	//析构函数--释放动态存储空间
 	~ElementList()
@@ -183,6 +184,7 @@ void ElementList::change()
 		}
 		cout << ElementType->id << '\t' << ElementType->name << '\t' << ElementType->score << '\n' << endl;
 	}
+	sort(head, tail);
 	return;
 }
 //del--删除学生信息
@@ -299,11 +301,26 @@ void ElementList::sort(element* head, element* tail)
 	sort(ElementType1->next, tail);
 	return;
 }
+//invert--倒序
+void ElementList::invert()
+{
+	stu* StudentList1 = head, * StudentList2;
+	head = StudentList1->next;
+	StudentList1->next = NULL;
+	StudentList2 = StudentList1;
+	tail = StudentList1;
+	while (head->next != NULL)
+	{
+		StudentList1 = head;
+		head = head->next;
+		StudentList1->next = StudentList2;
+		StudentList2 = StudentList1;
+	}
+	head->next = StudentList2;
+}
 //view--总览所有学生信息
 void ElementList::view()
 {
-	//先对数据进行排序
-	sort(head, tail);
 	cout << "结果：\n";
 	int n;                   //用于记录名次
 	element* ElementType1 = head;
@@ -616,6 +633,7 @@ void user::save()
 #define choose_all_del '4'
 #define choose_add '5'
 #define choose_view '6'
+#define choose_invert '7'
 #define choose_exit '0'
 #define print '1'
 #define Save '1'
@@ -686,6 +704,9 @@ int main()
 			break;
 		case choose_view:
 			run.view();
+			break;
+		case choose_invert:
+			run.invert();
 			break;
 		Error:
 			if (your_choice == choose_exit)
