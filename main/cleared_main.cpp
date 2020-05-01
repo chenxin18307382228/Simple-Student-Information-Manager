@@ -52,6 +52,7 @@ public:
 	void add(stu);                 //添加新学生信息
 	void sort(stu*, stu*);      //对学生信息依据成绩排序
 	void view();                //信息总览
+	void invert();              //倒序
 	void GradeTable();          //打印成绩表
 	void save();                //保存学生信息
 	//析构函数--释放动态存储空间
@@ -189,7 +190,7 @@ void student::change(stu* temp, char* name)
 			strcpy(StudentList->name, name);
 		}
 	}
-	return;
+        return;
 }
 //change--修改学生成绩
 void student::change(int score, stu* temp)
@@ -202,6 +203,7 @@ void student::change(int score, stu* temp)
 			StudentList->score = score;
 		}
 	}
+	sort(head, tail);
 	return;
 }
 //del--删除学生信息
@@ -259,6 +261,7 @@ void student::add(stu new_student)
 	tail->next = StudentList;
 	StudentList->next = NULL;
 	tail = StudentList;
+	sort(head, tail);
 	return;
 }
 //sort--对学生成绩进行排名（快速排序）
@@ -293,8 +296,6 @@ void student::sort(stu* head, stu* tail)
 //view--总览所有学生信息
 void student::view()
 {
-	//先对数据进行排序
-	sort(head, tail);
 	cout << "结果：\n";
 	int n;                   //用于记录名次
 	stu* StudentList1 = head;
@@ -307,6 +308,23 @@ void student::view()
 	}
 	cout << "                                                              人数：" << n - 1 << endl;
 	return;
+}
+//invert--倒序
+void student::invert()
+{
+	stu* StudentList1 = head, * StudentList2;
+	head = StudentList1->next;
+	StudentList1->next = NULL;
+	StudentList2 = StudentList1;
+	tail = StudentList1;
+	while (head->next != NULL)
+	{
+		StudentList1 = head;
+		head = head->next;
+		StudentList1->next = StudentList2;
+		StudentList2 = StudentList1;
+	}
+	head->next = StudentList2;
 }
 //GradeTable--打印成绩表
 void student::GradeTable()
@@ -367,6 +385,7 @@ void student::save()
 #define choose_all_del 4
 #define choose_add 5
 #define choose_view 6
+#define choose_invert 7
 #define choose_exit 0
 #define print 1
 #define Save 1
@@ -551,6 +570,9 @@ int main()
 			break;
 		case choose_view:
 			run.view();
+			break;
+		case choose_invert:
+			run.invert();
 			break;
 		Error:
 			if (your_choice == choose_exit)
