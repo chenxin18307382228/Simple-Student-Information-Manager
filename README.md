@@ -19,6 +19,6 @@
 * 建立学生信息时，要依次输入学号、姓名、成绩，中间用空格隔开，在按`Enter`继续；
 * 除了`GradeTable.txt`文件，其他记事本一定不要贸然打开并修改，当然如果您有十足的把握的话也没关系，反正并不复杂；
 * 关于两个文件夹：
-  * main文件夹中的两个源代码的程序都是一样的，[original_main.cpp](https://github.com/chenxin18307382228/Simple-Student-Information-Manager/blob/master/main/cleared_main.cpp)中的输入输出流很多都是在类函数中完成的，[cleared_main.cpp](https://github.com/chenxin18307382228/Simple-Student-Information-Manager/blob/master/main/cleared_main.cpp)则是对`original_main.cpp`的代码的整理，使得输入输出都是在main函数中实现；
+  * [main](https://github.com/chenxin18307382228/Simple-Student-Information-Manager/tree/master/main)文件夹中的两个源代码的程序都是一样的，[original_main.cpp](https://github.com/chenxin18307382228/Simple-Student-Information-Manager/blob/master/main/cleared_main.cpp)中的输入输出流很多都是在类函数中完成的，[cleared_main.cpp](https://github.com/chenxin18307382228/Simple-Student-Information-Manager/blob/master/main/cleared_main.cpp)则是对`original_main.cpp`的代码的整理，使得输入输出都是在main函数中实现；
   * [Update_SSIM.cpp](https://github.com/chenxin18307382228/Simple-Student-Information-Manager/blob/master/update_main/Update_SSIM.cpp)则是在`original_main.cpp`的基础上加入了账户管理操作，其他内容无异。
 * 这是我的第一个Github版本库，很开心能加入这个社区，希望日后我能在这个社区里学到很多知识，并融入到这个社区中，谢谢您。
