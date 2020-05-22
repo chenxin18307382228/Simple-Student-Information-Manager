@@ -77,7 +77,7 @@ int student::set()
 		outfile << StudentList1->id << '\t' << StudentList1->name << '\t' << StudentList1->score << endl << endl;
 		StudentList1 = StudentList1->next;
 	}
-	outfile << "------------------------------------------------------\n";
+	outfile << "---------------------------------------------------------\n";
 	return num;           //返回学生数量num 
 }
 void student::find()
